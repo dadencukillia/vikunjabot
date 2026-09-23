@@ -23,26 +23,36 @@ func NewBot(telegramToken string, chatId int64) *Bot {
 	}
 }
 
-func (a *Bot) GetMe() (TelegramResponse[GetMeResponse], error) {
+func (a *Bot) sendApiReq(endpoint string, reqBody []byte, responseObj any) error {
 	resp, err := a.client.Post(
-		wrapApiUrl(a.telegramToken, "getMe"),
-		"", nil,
+		wrapApiUrl(a.telegramToken, endpoint),
+		"application/json", bytes.NewReader(reqBody),
 	)
 	if err != nil {
-		return TelegramResponse[GetMeResponse]{}, errors.Join(ErrTelegramSendingError, err)
+		return errors.Join(ErrTelegramSendingError, err)
 	}
+
 
 	defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
+	resBody, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return TelegramResponse[GetMeResponse]{}, errors.Join(ErrTelegramInvalidBodyResponse, err)
+		return errors.Join(ErrTelegramInvalidBodyResponse, err)
 	}
 
-	var ret TelegramResponse[GetMeResponse]
-	err = json.Unmarshal(body, &ret)
+	err = json.Unmarshal(resBody, responseObj)
 	if err != nil {
-		return TelegramResponse[GetMeResponse]{}, errors.Join(ErrTelegramUnexpectedResponseFormat, err)
+		return errors.Join(ErrTelegramUnexpectedResponseFormat, err)
+	}
+
+	return nil
+}
+
+func (a *Bot) GetMe() (TelegramResponse[GetMeResponse], error) {
+	var ret TelegramResponse[GetMeResponse]
+	err := a.sendApiReq("getMe", []byte{}, &ret)
+	if err != nil {
+		return TelegramResponse[GetMeResponse]{}, err
 	}
 
 	return ret, nil
@@ -65,26 +75,10 @@ func (a *Bot) SendTextMessage(text string, parseMode ParseModeEnum, webPreview b
 		return TelegramResponse[SendMessageResponse]{}, errors.Join(ErrTelegramInvalidRequestObject, err)
 	}
 
-	resp, err := a.client.Post(
-		wrapApiUrl(a.telegramToken, "sendMessage"),
-		"application/json",
-		bytes.NewReader(requestJson),
-	)
-	if err != nil {
-		return TelegramResponse[SendMessageResponse]{}, errors.Join(ErrTelegramSendingError, err)
-	}
-
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return TelegramResponse[SendMessageResponse]{}, errors.Join(ErrTelegramInvalidBodyResponse, err)
-	}
-
 	var ret TelegramResponse[SendMessageResponse]
-	err = json.Unmarshal(body, &ret)
+	err = a.sendApiReq("sendMessage", requestJson, &ret)
 	if err != nil {
-		return TelegramResponse[SendMessageResponse]{}, errors.Join(ErrTelegramUnexpectedResponseFormat, err)
+		return TelegramResponse[SendMessageResponse]{}, err
 	}
 
 	return ret, nil

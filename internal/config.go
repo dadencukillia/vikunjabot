@@ -10,7 +10,8 @@ type Config struct {
 	TelegramBotToken string `env:"TELEGRAM_BOT_TOKEN"`
 	TelegramChatId int64 `env:"TELEGRAM_CHAT_ID"`
 	VikunjaWebhookSecret string `env:"VIKUNJA_WEBHOOK_SECRET"`
-	Language string `env:"LANG"`
+	Language string `env:"LANG" envDefault:"en"`
+	ServerHost string `env:"SERVER_HOST" envDefault:"0.0.0.0:8080"`
 }
 
 var parsedConfig *Config = nil

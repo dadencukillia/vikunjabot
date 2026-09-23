@@ -1,2 +1,4 @@
 .envgarbage/
 .direnv/
+.env*
+!.env.sample

@@ -1,0 +1,11 @@
+EMOJI:project=📽️
+EMOJI:task=📋
+
+TITLE=<b>🦙 Vikunja</b>
+TITLE:project=<b>🦙 Vikunja:</b> project updates
+TITLE:task=<b>🦙 Vikunja:</b> tasks announces
+TITLE:reminders=<b>🦙 Vikunja</b> reminds you!
+
+NAME=<b>Name:</b>
+NAME:project=<b>Project name:</b>
+NAME:task=<b>Task name:</b>

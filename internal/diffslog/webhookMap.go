@@ -75,8 +75,8 @@ func MapWebhookMessage(event *webhook.WebhookMessage) any {
 	if createdType != 0 {
 		return CreationNode{
 			Type: createdType,
-			ProjectID: event.Data.GetProjects()[0].ID,
-			TaskID: event.Data.GetTasks()[0].ID,
+			ProjectID: event.Data.GetProjectID(),
+			TaskID: event.Data.GetTaskID(),
 			InstanceID: instanceId,
 			MessageData: &event.Data,
 		}
@@ -85,8 +85,8 @@ func MapWebhookMessage(event *webhook.WebhookMessage) any {
 	if updatedType != 0 {
 		return UpdationNode{
 			Type: updatedType,
-			ProjectID: event.Data.GetProjects()[0].ID,
-			TaskID: event.Data.GetTasks()[0].ID,
+			ProjectID: event.Data.GetProjectID(),
+			TaskID: event.Data.GetTaskID(),
 			InstanceID: instanceId,
 			MessageData: &event.Data,
 		}
@@ -95,8 +95,8 @@ func MapWebhookMessage(event *webhook.WebhookMessage) any {
 	if deletedType != 0 {
 		return DeletionNode{
 			Type: deletedType,
-			ProjectID: event.Data.GetProjects()[0].ID,
-			TaskID: event.Data.GetTasks()[0].ID,
+			ProjectID: event.Data.GetProjectID(),
+			TaskID: event.Data.GetTaskID(),
 			InstanceID: instanceId,
 			MessageData: &event.Data,
 		}
@@ -105,7 +105,7 @@ func MapWebhookMessage(event *webhook.WebhookMessage) any {
 	if immediateType != 0 {
 		return ImmediateNode{
 			Type: immediateType,
-			ProjectID: event.Data.GetProjects()[0].ID,
+			ProjectID: event.Data.GetProjectID(),
 			MessageData: &event.Data,
 		}
 	}

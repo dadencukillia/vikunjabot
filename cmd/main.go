@@ -6,10 +6,9 @@ import (
 	"log"
 	"vikunjabot/internal"
 	"vikunjabot/internal/diffslog"
+	"vikunjabot/internal/diffstree"
 	"vikunjabot/internal/diffsummary"
 	"vikunjabot/internal/webhook"
-
-	"github.com/goccy/go-json"
 )
 
 func main() {
@@ -19,26 +18,21 @@ func main() {
 	}
 
 	localePack, err := diffsummary.LoadLocalePack(config.Language)
+	fmt.Println(config.Language)
 	if err != nil {
 		log.Panic(err)
 	}
 
-	fmt.Println(localePack.GetOrDefault("TITLE", "task", "not found"))
+	sumGenerator := diffsummary.NewSummariesGenerator(localePack)
 
-	evLog := diffslog.NewDiffsLog()
 	evLogSq := diffslog.NewDiffsLog()
 
 	server := webhook.NewWebhookServer(config.ServerHost, config.VikunjaWebhookSecret)
 	server.Run(context.Background(), func(message webhook.WebhookMessage) error {
-		evLog.AddEvent(&message)
 		evLogSq.AddEvent(&message)
 		evLogSq.Squash()
-
-		b, _ := json.Marshal(evLog.GenerateLogFlow())
-		fmt.Println("Unsquashed:", string(b))
-
-		bsq, _ := json.Marshal(evLogSq.GenerateLogFlow())
-		fmt.Println("Squashed:", string(bsq))
+		tree := diffstree.LogFlowToDiffsTree(evLogSq.GenerateLogFlow())
+		fmt.Println(sumGenerator.GenerateHTMLSummaries(&tree))
 
 		return nil
 	})

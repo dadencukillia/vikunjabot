@@ -4,13 +4,11 @@ import (
 	"embed"
 	"errors"
 	"fmt"
-	"regexp"
 	"strings"
 )
 
 //go:embed localizations/*.lang
 var localizationPack embed.FS
-var dictReplaceRegex = regexp.MustCompile(`\^{[A-Z_:]+}`)
 
 type LocalePack struct {
 	code string
@@ -79,7 +77,7 @@ func (a *LocalePack) GetWithDict(key string, variant string, processReplacement 
 		return "", err
 	}
 
-	return dictReplaceRegex.ReplaceAllStringFunc(value, func(s string) string {
+	return replaceRegex.ReplaceAllStringFunc(value, func(s string) string {
 		replacement, ok := processReplacement(s[2:len(s) - 1])
 		if !ok {
 			return s

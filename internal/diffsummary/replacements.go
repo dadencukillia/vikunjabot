@@ -9,16 +9,19 @@ import (
 )
 
 var scopeRegex = regexp.MustCompile("^[A-Z_]+$")
+var replaceRegex = regexp.MustCompile(`\^{[A-Z_:]+}`)
 
 type ReplacementsEngine struct {
 	sources map[string]any
 	handlers map[string]func(key string) (string, bool)
+	directs map[string]string
 }
 
 func NewReplacementsEngine() *ReplacementsEngine {
 	return &ReplacementsEngine{
 		sources: map[string]any{},
 		handlers: map[string]func(key string) (string, bool){},
+		directs: map[string]string{},
 	}
 }
 
@@ -42,7 +45,15 @@ func (a *ReplacementsEngine) RegisterHandler(scope string, handler func(key stri
 	return nil
 }
 
+func (a *ReplacementsEngine) RegisterDirect(key string, value string) {
+	a.directs[key] = value
+}
+
 func (a *ReplacementsEngine) ProcessReplacement(key string) (string, bool) {
+	if direct, ok := a.directs[key]; ok {
+		return direct, true
+	}
+
 	delim := strings.SplitN(key, ":", 2)
 	if len(delim) != 2 {
 		return "", false
@@ -83,4 +94,15 @@ func (a *ReplacementsEngine) ProcessReplacement(key string) (string, bool) {
 	}
 
 	return "", false
+}
+
+func (a *ReplacementsEngine) ProcessString(text string) string {
+	return replaceRegex.ReplaceAllStringFunc(text, func(s string) string {
+		replacement, ok := a.ProcessReplacement(s[2:len(s) - 1])
+		if !ok {
+			return s
+		}
+
+		return replacement
+	})
 }

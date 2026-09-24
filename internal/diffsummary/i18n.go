@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-//go:embed localizations
+//go:embed localizations/*.lang
 var localizationPack embed.FS
 var dictReplaceRegex = regexp.MustCompile(`\^{[A-Z_:]+}`)
 
@@ -20,7 +20,7 @@ type LocalePack struct {
 func LoadLocalePack(localeCode string) (*LocalePack, error) {
 	code := strings.ToLower(strings.TrimSpace(localeCode))
 
-	langContent, err := localizationPack.ReadFile(code + ".lang")
+	langContent, err := localizationPack.ReadFile("localizations/" + code + ".lang")
 	if err != nil {
 		return nil, errors.Join(ErrLocaleNotFound, err)
 	}
@@ -61,7 +61,16 @@ func (a *LocalePack) Get(key string, variant string) (string, error) {
 		return val, nil
 	}
 
-	return "", fmt.Errorf("no such key %s:%s: %v", lowKey, lowVariant, ErrLocaleKeyNotFound)
+	return "", fmt.Errorf("no such key '%s:%s': %v", strings.ToUpper(key), lowVariant, ErrLocaleKeyNotFound)
+}
+
+func (a *LocalePack) GetOrDefault(key string, variant string, defaultVal string) string {
+	v, err := a.Get(key, variant)
+	if err != nil {
+		return defaultVal
+	}
+
+	return v
 }
 
 func (a *LocalePack) GetWithDict(key string, variant string, processReplacement func(key string) (string, bool)) (string, error) {
@@ -78,4 +87,21 @@ func (a *LocalePack) GetWithDict(key string, variant string, processReplacement 
 
 		return replacement
 	}), nil
+}
+
+func (a *LocalePack) GetWithDictOrDefault(key string, variant string, processReplacement func(key string) (string, bool), defaultVal string) string {
+	v, err := a.GetWithDict(key, variant, processReplacement)
+	if err != nil {
+		return defaultVal
+	}
+
+	return v
+}
+
+func (a *LocalePack) GetWithRepl(key string, variant string, engine *ReplacementsEngine) (string, error) {
+	return a.GetWithDict(key, variant, engine.ProcessReplacement)
+}
+
+func (a *LocalePack) GetWithReplOrDefault(key string, variant string, engine *ReplacementsEngine, defaultVal string) string {
+	return a.GetWithDictOrDefault(key, variant, engine.ProcessReplacement, defaultVal)
 }

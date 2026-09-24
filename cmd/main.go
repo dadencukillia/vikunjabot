@@ -6,6 +6,7 @@ import (
 	"log"
 	"vikunjabot/internal"
 	"vikunjabot/internal/diffslog"
+	"vikunjabot/internal/diffsummary"
 	"vikunjabot/internal/webhook"
 
 	"github.com/goccy/go-json"
@@ -16,6 +17,13 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
+
+	localePack, err := diffsummary.LoadLocalePack(config.Language)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	fmt.Println(localePack.GetOrDefault("TITLE", "task", "not found"))
 
 	evLog := diffslog.NewDiffsLog()
 	evLogSq := diffslog.NewDiffsLog()

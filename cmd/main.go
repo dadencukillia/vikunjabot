@@ -26,10 +26,10 @@ func main() {
 		evLogSq.AddEvent(&message)
 		evLogSq.Squash()
 
-		b, _ := json.Marshal(evLog.GetLogFlow())
+		b, _ := json.Marshal(evLog.GenerateLogFlow())
 		fmt.Println("Unsquashed:", string(b))
 
-		bsq, _ := json.Marshal(evLogSq.GetLogFlow())
+		bsq, _ := json.Marshal(evLogSq.GenerateLogFlow())
 		fmt.Println("Squashed:", string(bsq))
 
 		return nil

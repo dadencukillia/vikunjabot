@@ -58,7 +58,7 @@ type VikunjaTask struct {
 	DueDate string `json:"due_date"`
 	Priority int `json:"priority"`
 	Identifier string `json:"identifier"`
-	ProjectID int `json:"project_id"`
+	ProjectID int64 `json:"project_id"`
 }
 
 type VikunjaTaskComment struct {

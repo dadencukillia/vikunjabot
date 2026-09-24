@@ -31,7 +31,7 @@ func (a *DiffsLog) AddEvent(event *webhook.WebhookMessage) {
 	}
 }
 
-func (a *DiffsLog) GetLogFlow() LogFlow {
+func (a *DiffsLog) GenerateLogFlow() LogFlow {
 	logFlow := LogFlow{}
 
 	for _, cNode := range a.creations {

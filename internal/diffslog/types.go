@@ -129,20 +129,18 @@ const (
 	ImmediateNoType ImmediateNodeType = iota
 	ImmediateProjectSharedUser
 	ImmediateProjectSharedTeam
-	ImmediateTaskReminderFired
 	ImmediateTaskOverdue
 	ImmediateTasksOverdue
-	ImmediateReminderFired
+	ImmediateTaskReminderFired
 )
 
 func (a ImmediateNodeType) MarshalJSON() ([]byte, error) {
 	switch a {
 	case ImmediateProjectSharedUser: return []byte("\"project_shared_user\""), nil
 	case ImmediateProjectSharedTeam: return []byte("\"project_shared_team\""), nil
-	case ImmediateTaskReminderFired: return []byte("\"task_reminder_fired\""), nil
 	case ImmediateTaskOverdue: return []byte("\"task_overdue\""), nil
 	case ImmediateTasksOverdue: return []byte("\"tasks_overdue\""), nil
-	case ImmediateReminderFired: return []byte("\"reminder_fired\""), nil
+	case ImmediateTaskReminderFired: return []byte("\"task_reminder_fired\""), nil
 	default: return []byte("\"unknown\""), nil
 	}
 }

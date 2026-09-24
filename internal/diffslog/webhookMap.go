@@ -66,7 +66,7 @@ func MapWebhookMessage(event *webhook.WebhookMessage) any {
 	case "project.shared.team": immediateType = ImmediateProjectSharedTeam
 	case "project.shared.user": immediateType = ImmediateProjectSharedUser
 	case "task.overdue": immediateType = ImmediateTaskOverdue
-	case "task.reminder.fired": immediateType = ImmediateReminderFired
+	case "task.reminder.fired": immediateType = ImmediateTaskReminderFired
 	case "tasks.overdue": immediateType = ImmediateTasksOverdue
 
 	default: return nil

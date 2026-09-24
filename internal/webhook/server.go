@@ -2,11 +2,11 @@ package webhook
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"log"
 	"net"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/goccy/go-json"
@@ -56,7 +56,22 @@ func (a *WebhookServer) Run(
 			return
 		}
 
-		fmt.Println(message.EventName)
+		filled := strings.Builder{}
+		if message.Data.Task != nil { filled.WriteString("task ") }
+		if len(message.Data.Tasks) != 0 { filled.WriteString("tasks ") }
+		if message.Data.Assignee != nil { filled.WriteString("assignee ") }
+		if message.Data.Comment != nil { filled.WriteString("comment ") }
+		if message.Data.Attachment != nil { filled.WriteString("attachment ") }
+		if message.Data.Relation != nil { filled.WriteString("relation ") }
+		if message.Data.Reminder != nil { filled.WriteString("reminder ") }
+		if message.Data.Project != nil { filled.WriteString("project ") }
+		if len(message.Data.Projects) != 0 { filled.WriteString("projects ") }
+		if message.Data.User != nil { filled.WriteString("user ") }
+		if message.Data.Team != nil { filled.WriteString("team ") }
+
+		log.Printf("Got event %s from %s: doer %s", message.EventName, message.Data.Doer.Username, filled.String())
+
+		handler(message)
 	})
 
 	s := &http.Server{

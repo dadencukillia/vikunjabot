@@ -53,7 +53,7 @@ type VikunjaProject struct {
 
 type VikunjaTask struct {
 	Title string `json:"title"`
-	Id int `json:"id"`
+	ID int64 `json:"id"`
 	Description string `json:"description"`
 	DueDate string `json:"due_date"`
 	Priority int `json:"priority"`
@@ -132,4 +132,55 @@ type WebhookMessageData struct {
 	Projects map[int64]*VikunjaProject `json:"projects,omitempty"`
 	User *VikunjaUser `json:"user,omitempty"`
 	Team *VikunjaTeam `json:"team"`
+}
+
+func (a *WebhookMessageData) GetProjects() []*VikunjaProject {
+	if a.Project != nil {
+		return []*VikunjaProject{ a.Project }
+	}
+
+	if len(a.Projects) != 0 {
+		projects := make([]*VikunjaProject, len(a.Projects))
+		for _, v := range a.Projects {
+			projects = append(projects, v)
+		}
+		
+		return projects
+	}
+	
+	return []*VikunjaProject{}
+}
+
+func (a *WebhookMessageData) GetTasks() []*VikunjaTask {
+	if a.Task != nil {
+		return []*VikunjaTask{ a.Task }
+	}
+
+	if len(a.Tasks) != 0 {
+		return a.Tasks
+	}
+
+	return []*VikunjaTask{}
+}
+
+func (a *WebhookMessageData) GetProjectID() int64 {
+	projects := a.GetProjects()
+	if len(projects) >= 1 {
+		return projects[0].ID
+	}
+
+	return -1
+}
+
+func (a *WebhookMessageData) GetTaskID() int64 {
+	tasks := a.GetTasks()
+	if len(tasks) >= 1 {
+		return tasks[0].ID
+	}
+
+	if a.Relation != nil {
+		return min(a.Relation.TaskID, a.Relation.OtherTaskID)
+	}
+
+	return -1
 }

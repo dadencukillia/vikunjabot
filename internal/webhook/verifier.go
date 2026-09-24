@@ -10,7 +10,7 @@ import (
 
 func (a *WebhookServer) verifyHeader(r *http.Request, body []byte) error {
 	signature := r.Header.Get("X-Vikunja-Signature")
-	if len(signature) != 32 {
+	if len(signature) != 64 {
 		return ErrWebInvalidHash
 	}
 

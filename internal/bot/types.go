@@ -47,7 +47,7 @@ type SendMessageRequest struct {
 
 type SendMessageResponse struct {
 	MessageID int64 `json:"message_id"`
-	Date string `json:"date"`
+	Date int64 `json:"date"`
 	Text string `json:"text"`
 	From TelegramUser `json:"from"`
 	Chat TelegramChat `json:"chat"`

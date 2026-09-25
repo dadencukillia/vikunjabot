@@ -14,13 +14,20 @@ type Config struct {
 	ServerHost string `env:"SERVER_HOST" envDefault:"0.0.0.0:8080"`
 }
 
-var parsedConfig *Config = &Config{}
+var parsedConfig *Config = nil
 
 func GetConfig() (*Config, error) {
-	err := env.Parse(parsedConfig)
+	if parsedConfig != nil {
+		return parsedConfig, nil
+	}
+
+	config := &Config{}
+	err := env.Parse(config)
 	if err != nil {
 		return nil, fmt.Errorf("config load error: %w", err)
 	}
+
+	parsedConfig = config
 
 	return parsedConfig, nil
 }

@@ -9,3 +9,5 @@ TITLE:reminders=<b>🦙 Vikunja</b>
 NAME=<b></b>
 NAME:project=<b></b>
 NAME:task=<b></b>
+
+TASKS_OVERDUE_COUNT=^{COUNT}

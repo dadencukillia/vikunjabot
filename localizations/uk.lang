@@ -9,3 +9,5 @@ TITLE:reminders=<b>🦙 Vikunja</b> нагадування
 NAME=<b>Назва:</b>
 NAME:project=<b>Назва проєкту:</b>
 NAME:task=<b>Назва завдання:</b>
+
+TASKS_OVERDUE_COUNT=🚩 ^{COUNT} задач просрочилося

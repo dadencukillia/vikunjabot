@@ -15,28 +15,38 @@ func NewProjectFormatter(projectNode *diffstree.ProjectNode) ProjectFormatter {
 	}
 }
 
-func (a ProjectFormatter) GetProjectTitleVariant() string {
-	if a.projectNode.TopCheck().Any(
+func (a ProjectFormatter) ProjectEventsPresent() bool {
+	return a.projectNode.TopCheck().Any(
 		diffstree.TopSelf,
 		diffstree.TopImSelfTeamShared,
 		diffstree.TopImSelfUserShared,
-	).Fits() {
-		return "project"
+	).Fits()
+}
 
-	} else if a.projectNode.TopCheck().Any(
+func (a ProjectFormatter) TaskEventsPresent() bool {
+	return a.projectNode.TopCheck().Any(
 		diffstree.TopSelfTask,
 		diffstree.TopSelfTaskRelation,
 		diffstree.TopSelfTaskAttachment,
 		diffstree.TopSelfTaskAssignee,
 		diffstree.TopSelfTaskComment,
-	).Fits() {
-		return "task"
+	).Fits()
+}
 
-	} else if a.projectNode.TopCheck().Any(
+func (a ProjectFormatter) RemindEventsPresent() bool {
+	return a.projectNode.TopCheck().Any(
 		diffstree.TopImSelfTasksOverdue,
 		diffstree.TopImSelfTaskOverdue,
 		diffstree.TopImSelfTaskReminder,
-	).Fits() {
+	).Fits()
+}
+
+func (a ProjectFormatter) GetProjectTitleVariant() string {
+	if a.ProjectEventsPresent() {
+		return "project"
+	} else if a.TaskEventsPresent() {
+		return "task"
+	} else if a.RemindEventsPresent() {
 		return "reminders"
 	}
 
@@ -46,5 +56,8 @@ func (a ProjectFormatter) GetProjectTitleVariant() string {
 func (a ProjectFormatter) BuildText(b texts.TextBuilder, t *texts.TextTools) string {
 	return b.
 		Line(true, t.Lang("TITLE", a.GetProjectTitleVariant())).
+		Line(true, t.Concat(t.Lang("EMOJI", "project"), t, t.Lang("NAME", "project"), t, a.projectNode.Instance.Title)).
+		EmptyLine(true).
+		Line(len(a.projectNode.ImTasksOverdue) != 0, t.QuoteLine(t.Lang("TASKS_OVERDUE_COUNT", ""))).
 		String()
 }

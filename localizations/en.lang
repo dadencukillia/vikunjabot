@@ -9,3 +9,5 @@ TITLE:reminders=<b>🦙 Vikunja</b> reminds you!
 NAME=<b>Name:</b>
 NAME:project=<b>Project name:</b>
 NAME:task=<b>Task name:</b>
+
+TASKS_OVERDUE_COUNT=🚩 ^{COUNT} tasks missed their deadline

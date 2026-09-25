@@ -1,14 +1,11 @@
-package diffsummary
+package texts
 
 import (
-	"embed"
 	"errors"
 	"fmt"
 	"strings"
+	"vikunjabot"
 )
-
-//go:embed localizations/*.lang
-var localizationPack embed.FS
 
 type LocalePack struct {
 	code string
@@ -18,7 +15,7 @@ type LocalePack struct {
 func LoadLocalePack(localeCode string) (*LocalePack, error) {
 	code := strings.ToLower(strings.TrimSpace(localeCode))
 
-	langContent, err := localizationPack.ReadFile("localizations/" + code + ".lang")
+	langContent, err := vikunjabot.LocalizationPack.ReadFile("localizations/" + code + ".lang")
 	if err != nil {
 		return nil, errors.Join(ErrLocaleNotFound, err)
 	}

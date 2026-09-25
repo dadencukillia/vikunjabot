@@ -1,17 +1,16 @@
 package diffsummary
 
 import (
-	"strings"
 	"vikunjabot/internal/diffstree"
-	"vikunjabot/internal/utils"
+	"vikunjabot/internal/texts"
 )
 
 
 type SummariesGenerator struct {
-	localePack *LocalePack
+	localePack *texts.LocalePack
 }
 
-func NewSummariesGenerator(localePack *LocalePack) SummariesGenerator {
+func NewSummariesGenerator(localePack *texts.LocalePack) SummariesGenerator {
 	return SummariesGenerator{
 		localePack: localePack,
 	}
@@ -26,37 +25,9 @@ func (a SummariesGenerator) GenerateHTMLSummaries(root *diffstree.RootNode) (res
 }
 
 func (a SummariesGenerator) GenerateProjectHTMLSummary(project *diffstree.ProjectNode) string {
-	titleVariant := ""
-
-	if utils.NewContainChecker(project.Topology).Any(
-		diffstree.TopSelf,
-		diffstree.TopImSelfTeamShared,
-		diffstree.TopImSelfUserShared,
-	).Fits() {
-		titleVariant = "project"
-
-	} else if utils.NewContainChecker(project.Topology).Any(
-		diffstree.TopSelfTask,
-		diffstree.TopSelfTaskRelation,
-		diffstree.TopSelfTaskAttachment,
-		diffstree.TopSelfTaskAssignee,
-		diffstree.TopSelfTaskComment,
-	).Fits() {
-		titleVariant = "task"
-
-	} else if utils.NewContainChecker(project.Topology).Any(
-		diffstree.TopImSelfTasksOverdue,
-		diffstree.TopImSelfTaskOverdue,
-		diffstree.TopImSelfTaskReminder,
-	).Fits() {
-		titleVariant = "reminders"
-
-	}
-
-	b, t := NewTextBuilder(a.localePack)
+	b, _ := texts.NewTextBuilder(a.localePack)
 
 	return b.
-		Line(true, t.Lang("TITLE", titleVariant)).
-		EmptyLine(true).
+		SubBuild(NewProjectFormatter(project)).
 		String()
 }

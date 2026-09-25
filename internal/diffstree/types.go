@@ -2,6 +2,7 @@ package diffstree
 
 import (
 	"vikunjabot/internal/diffslog"
+	"vikunjabot/internal/utils"
 	"vikunjabot/internal/webhook"
 )
 
@@ -51,6 +52,10 @@ type ProjectNode struct {
 	ImTasksOverdue map[int64]struct{}
 	DiffDoer *webhook.VikunjaUser
 	Topology map[ChangingTopology]struct{} // what were changed at all
+}
+
+func (node *ProjectNode) TopCheck() *utils.ContainChecker[ChangingTopology, struct{}] {
+	return utils.NewContainChecker(node.Topology)
 }
 
 type ImUserSharedNode struct {

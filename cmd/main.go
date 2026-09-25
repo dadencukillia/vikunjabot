@@ -8,6 +8,7 @@ import (
 	"vikunjabot/internal/diffslog"
 	"vikunjabot/internal/diffstree"
 	"vikunjabot/internal/diffsummary"
+	"vikunjabot/internal/texts"
 	"vikunjabot/internal/webhook"
 )
 
@@ -17,7 +18,7 @@ func main() {
 		log.Panic(err)
 	}
 
-	localePack, err := diffsummary.LoadLocalePack(config.Language)
+	localePack, err := texts.LoadLocalePack(config.Language)
 	if err != nil {
 		log.Panic(err)
 	}

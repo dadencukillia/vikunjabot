@@ -1,4 +1,4 @@
-package diffsummary
+package texts
 
 import (
 	"fmt"

@@ -6,7 +6,6 @@ import (
 	"vikunjabot/internal/utils"
 )
 
-var LANG_KEY_NOT_SET = "key not set"
 
 type SummariesGenerator struct {
 	localePack *LocalePack
@@ -51,22 +50,13 @@ func (a SummariesGenerator) GenerateProjectHTMLSummary(project *diffstree.Projec
 		diffstree.TopImSelfTaskReminder,
 	).Fits() {
 		titleVariant = "reminders"
+
 	}
 
-	engine := NewReplacementsEngine()
-	engine.RegisterDirect("SUMMARY_TITLE", a.localePack.GetOrDefault("TITLE", titleVariant, LANG_KEY_NOT_SET))
-	engine.RegisterHandler("LANG", func(key string) (string, bool) {
-		langKey := strings.SplitN(key, ":", 2)
-		if len(langKey) != 2 {
-			return "", false
-		}
+	b, t := NewTextBuilder(a.localePack)
 
-		return a.localePack.GetOrDefault(langKey[0], langKey[1], LANG_KEY_NOT_SET), true
-	})
-
-	return engine.ProcessString(`
-^{SUMMARY_TITLE}
-
-^{LANG:EMOJI:PROJECT} ^{LANG:NAME:PROJECT}
-	`)
+	return b.
+		Line(true, t.Lang("TITLE", titleVariant)).
+		EmptyLine(true).
+		String()
 }

@@ -18,7 +18,6 @@ func main() {
 	}
 
 	localePack, err := diffsummary.LoadLocalePack(config.Language)
-	fmt.Println(config.Language)
 	if err != nil {
 		log.Panic(err)
 	}

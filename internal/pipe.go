@@ -11,6 +11,8 @@ import (
 	"vikunjabot/internal/texts"
 	"vikunjabot/internal/utils"
 	"vikunjabot/internal/webhook"
+
+	"github.com/goccy/go-json"
 )
 
 type Pipe struct {
@@ -61,6 +63,10 @@ func (a Pipe) RunPipe(events []webhook.WebhookMessage) {
 	logs.Squash()
 	flow := logs.GenerateLogFlow()
 	tree := diffstree.LogFlowToDiffsTree(flow)
+
+	if flowJson, err := json.Marshal(flow); err == nil {
+		log.Println("squashed:", string(flowJson))
+	}
 
 	textSummGenerator := diffsummary.NewSummariesGenerator(a.lang, a.config.VikunjaHost, a.config.TimeZone)
 	summs := textSummGenerator.GenerateHTMLSummaries(&tree)

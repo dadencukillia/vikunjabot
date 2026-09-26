@@ -9,97 +9,26 @@ func LogFlowToDiffsTree(flow diffslog.LogFlow) RootNode {
 		Projects: map[int64]*ProjectNode{},
 	}
 
-	// Projects registration
-	for _, ev := range flow.Instances {
-		for _, project := range ev.MessageData.GetProjects() {
-			if p, ok := rootNode.Projects[project.ID]; !ok || (p.Instance == nil && project != nil) {
-				rootNode.Projects[project.ID] = &ProjectNode{
-					ID: project.ID,
-					Instance: project,
-					Status: Unchanged,
-					Tasks: map[int64]*TaskNode{},
-					ImUsersShared: []ImUserSharedNode{},
-					ImTeamsShared: []ImTeamSharedNode{},
-					ImTasksOverdue: map[int64]struct{}{},
-					DiffDoer: nil,
-					Topology: map[ChangingTopology]struct{}{},
-				}
-			}
-		}
-	}
-
-	for _, ev := range flow.Events {
-		for _, project := range ev.MessageData.GetProjects() {
-			if p, ok := rootNode.Projects[project.ID]; !ok || (p.Instance == nil && project != nil) {
-				rootNode.Projects[project.ID] = &ProjectNode{
-					ID: project.ID,
-					Instance: project,
-					Status: Unchanged,
-					Tasks: map[int64]*TaskNode{},
-					ImUsersShared: []ImUserSharedNode{},
-					ImTeamsShared: []ImTeamSharedNode{},
-					ImTasksOverdue: map[int64]struct{}{},
-					DiffDoer: nil,
-					Topology: map[ChangingTopology]struct{}{},
-				}
-			}
-		}
-	}
-
-	// Tasks registration
-	for _, ev := range flow.Instances {
-		for _, task := range ev.MessageData.GetTasks() {
-			taskNode := TaskNode{
-				ID: task.ID,
-				Instance: task,
-				Status: Unchanged,
-				Comments: []CommentNode{},
-				Assignees: []AssigneeNode{},
-				Attachments: []AttachmentNode{},
-				Relations: []RelationNode{},
-				ImReminders: []ImReminderNode{},
-				ImOverdue: false,
-				DiffDoer: nil,
-			}
-
-			if _, ok := rootNode.Projects[task.ProjectID]; ok {
-				rootNode.Projects[task.ProjectID].Tasks[task.ID] = &taskNode
-			} else {
-				rootNode.Projects[task.ProjectID] = &ProjectNode{
-					ID: task.ProjectID,
-					Instance: nil,
-					Status: Unchanged,
-					Tasks: map[int64]*TaskNode{
-						task.ID: &taskNode,
-					},
-					ImUsersShared: []ImUserSharedNode{},
-					ImTeamsShared: []ImTeamSharedNode{},
-					ImTasksOverdue: map[int64]struct{}{},
-					DiffDoer: nil,
-					Topology: map[ChangingTopology]struct{}{},
-				}
-			}
-		}
-	}
+	rootRegister(&rootNode, &flow)
 	
 	// Instances
+
 	for _, ev := range flow.Instances {
+		project := rootNode.Projects[ev.ProjectID]
+
 		switch ev.Instance {
 		case diffslog.InstanceProject:
-			project := rootNode.Projects[ev.ProjectID]
 			project.DiffDoer = &ev.MessageData.Doer
 			project.Status = ChangeTypeFromActionType(ev.Action)
 			project.Topology[TopSelf] = struct{}{}
 
 		case diffslog.InstanceTask:
-			project := rootNode.Projects[ev.ProjectID]
 			task := project.Tasks[ev.TaskID]
 			task.DiffDoer = &ev.MessageData.Doer
 			task.Status = ChangeTypeFromActionType(ev.Action)
 			project.Topology[TopSelfTask] = struct{}{}
 
 		case diffslog.InstanceComment:
-			project := rootNode.Projects[ev.ProjectID]
 			task := project.Tasks[ev.TaskID]
 			task.Comments = append(task.Comments, CommentNode{
 				Status: ChangeTypeFromActionType(ev.Action),
@@ -109,7 +38,6 @@ func LogFlowToDiffsTree(flow diffslog.LogFlow) RootNode {
 			project.Topology[TopSelfTaskComment] = struct{}{}
 
 		case diffslog.InstanceAssignee:
-			project := rootNode.Projects[ev.ProjectID]
 			task := project.Tasks[ev.TaskID]
 			task.Assignees = append(task.Assignees, AssigneeNode{
 				Status: ChangeTypeFromActionType(ev.Action),
@@ -119,7 +47,6 @@ func LogFlowToDiffsTree(flow diffslog.LogFlow) RootNode {
 			project.Topology[TopSelfTaskAssignee] = struct{}{}
 
 		case diffslog.InstanceAttachment:
-			project := rootNode.Projects[ev.ProjectID]
 			task := project.Tasks[ev.TaskID]
 			task.Attachments = append(task.Attachments, AttachmentNode{
 				Status: ChangeTypeFromActionType(ev.Action),
@@ -129,7 +56,6 @@ func LogFlowToDiffsTree(flow diffslog.LogFlow) RootNode {
 			project.Topology[TopSelfTaskAttachment] = struct{}{}
 
 		case diffslog.InstanceRelation:
-			project := rootNode.Projects[ev.ProjectID]
 			task := project.Tasks[ev.TaskID]
 			task.Relations = append(task.Relations, RelationNode{
 				Status: ChangeTypeFromActionType(ev.Action),
@@ -141,22 +67,9 @@ func LogFlowToDiffsTree(flow diffslog.LogFlow) RootNode {
 	}
 
 	// Events
+
 	for _, ev := range flow.Events {
-		project, ok := rootNode.Projects[ev.ProjectID]
-		if !ok {
-			project = &ProjectNode{
-				ID: ev.ProjectID,
-				Instance: nil,
-				Status: Unchanged,
-				Tasks: map[int64]*TaskNode{},
-				ImUsersShared: []ImUserSharedNode{},
-				ImTeamsShared: []ImTeamSharedNode{},
-				ImTasksOverdue: map[int64]struct{}{},
-				DiffDoer: nil,
-				Topology: map[ChangingTopology]struct{}{},
-			}
-			rootNode.Projects[ev.ProjectID] = project
-		}
+		project := rootNode.Projects[ev.ProjectID]
 
 		switch ev.Type {
 		case diffslog.ImmediateProjectSharedUser:

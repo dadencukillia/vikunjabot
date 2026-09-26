@@ -50,9 +50,16 @@ func (a *WebhookServer) Run(
 		var message WebhookMessage
 		err = json.Unmarshal(body, &message)
 		if err != nil {
-			log.Printf("%v: %v", ErrWebInvalidEventRequest, err)
+			log.Printf("%v: %v\n", ErrWebInvalidEventRequest, err)
 			w.WriteHeader(400)
 			w.Write([]byte(ErrWebInvalidEventRequest.Error()))
+			return
+		}
+
+		if len(message.Data.GetProjects()) == 0 {
+			log.Printf("%v", ErrWebNoEventProject)
+			w.WriteHeader(400)
+			w.Write([]byte(ErrWebNoEventProject.Error()))
 			return
 		}
 

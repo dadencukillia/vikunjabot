@@ -42,7 +42,7 @@ func (a TaskFormatter) BuildText(b texts.TextBuilder, t *texts.TextTools) string
 				t.Anchor(t.EscHTML(a.taskNode.Instance.Title), utils.UrlConcat(a.vikunjaHost, "/tasks/", a.taskNode.ID)),
 			)),
 			t.Cond(a.taskNode.Status != diffstree.Deleted, t.Concat(
-				t.Cond(len(description) != 0 && a.taskNode.Status != diffstree.Deleted && a.taskNode.Status != diffstree.Unchanged, "\n", t.Code(t.EscHTML(description))),
+				t.Cond(len(description) != 0 && a.taskNode.Status != diffstree.Unchanged, "\n", t.Code(t.EscHTML(description))),
 				t.Cond(len(statusBody) != 0, "\n\n", strings.TrimRight(statusBody, "\n")),
 			)),
 		))).

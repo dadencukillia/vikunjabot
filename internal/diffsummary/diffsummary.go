@@ -9,12 +9,14 @@ import (
 type SummariesGenerator struct {
 	localePack *texts.LocalePack
 	vikunjaHost string
+	timeZone string
 }
 
-func NewSummariesGenerator(localePack *texts.LocalePack, vikunjaHost string) SummariesGenerator {
+func NewSummariesGenerator(localePack *texts.LocalePack, vikunjaHost string, timeZone string) SummariesGenerator {
 	return SummariesGenerator{
 		localePack: localePack,
 		vikunjaHost: vikunjaHost,
+		timeZone: timeZone,
 	}
 }
 
@@ -30,6 +32,6 @@ func (a SummariesGenerator) GenerateProjectHTMLSummary(project *diffstree.Projec
 	b, _ := texts.NewTextBuilder(a.localePack)
 
 	return b.
-		SubBuild(NewProjectFormatter(project, a.vikunjaHost)).
+		SubBuild(NewProjectFormatter(project, a.vikunjaHost, a.timeZone)).
 		String()
 }

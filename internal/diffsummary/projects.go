@@ -11,12 +11,14 @@ import (
 type ProjectFormatter struct {
 	projectNode *diffstree.ProjectNode
 	vikunjaHost string
+	timeZone string
 }
 
-func NewProjectFormatter(projectNode *diffstree.ProjectNode, vikunjaHost string) ProjectFormatter {
+func NewProjectFormatter(projectNode *diffstree.ProjectNode, vikunjaHost string, timeZone string) ProjectFormatter {
 	return ProjectFormatter{
 		projectNode: projectNode,
 		vikunjaHost: vikunjaHost,
+		timeZone: timeZone,
 	}
 }
 
@@ -144,7 +146,7 @@ func (a ProjectFormatter) BuildText(b texts.TextBuilder, t *texts.TextTools) str
 			b.Line(true, t.Lang("EMOJI", "task"), t, t.Bold(t.Lang("PLURAL", "task")))
 
 			for _, task := range a.projectNode.Tasks {
-				b.SubBuild(NewTaskFormatter(task, a.vikunjaHost))
+				b.SubBuild(NewTaskFormatter(task, a.vikunjaHost, a.timeZone))
 			}
 
 			return b.String()

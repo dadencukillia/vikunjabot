@@ -13,6 +13,8 @@ type Config struct {
 	VikunjaHost string `env:"VIKUNJA_HOST" envDefault:"http://localhost:4321"`
 	Language string `env:"SUMMARY_LANG" envDefault:"en"`
 	ServerHost string `env:"SERVER_HOST" envDefault:"0.0.0.0:8080"`
+	TimeZone string `env:"TIME_ZONE" envDefault:"Etc/UTC"`
+	DebounceSeconds uint64 `env:"DEBOUNCE_SECONDS" envDefault:"900"`
 }
 
 var parsedConfig *Config = nil

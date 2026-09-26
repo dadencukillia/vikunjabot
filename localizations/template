@@ -1,20 +1,25 @@
 EMOJI:project=📽️
 EMOJI:task=📋
+EMOJI:file=📁
+EMOJI:comment=💬
+EMOJI:assignment=📌
+EMOJI:remind=🔔
+EMOJI:created=+
+EMOJI:updated=⟳
+EMOJI:deleted=✗
 
 TITLE=<b>🦙 Vikunja</b>
 TITLE:project=<b>🦙 Vikunja:</b>
 TITLE:task=<b>🦙 Vikunja:</b>
 TITLE:reminders=<b>🦙 Vikunja</b>
 
-NAME=<b></b>
-NAME:project=<b></b>
-NAME:task=<b></b>
+SINGULAR:project=
+SINGULAR:task=
 
 PLURAL:task=
 
-STATUS:created=
-STATUS:updated=
-STATUS:deleted=
+STATUS_PROJECT:updated=
+STATUS_PROJECT:deleted=
 
 PROJECT_SHARED_TEAM=^{NAME}
 PROJECT_SHARED_TEAMS=^{COUNT}
@@ -22,3 +27,26 @@ PROJECT_SHARED_USER=^{NAME}
 PROJECT_SHARED_USERS=^{COUNT}
 
 TASKS_OVERDUE_COUNT=^{COUNT}
+TASK_OVERDUE=
+
+ANCHOR:website=
+ANCHOR:project=
+ANCHOR:task=
+
+TASK_RELATIONS=
+TASK_RELATION:subtask=
+TASK_RELATION:parenttask=
+TASK_RELATION:related=
+TASK_RELATION:duplicateof=
+TASK_RELATION:duplicates=
+TASK_RELATION:blocking=
+TASK_RELATION:blocked=
+TASK_RELATION:preceeds=
+TASK_RELATION:follows=
+TASK_RELATION:copiedfrom=
+TASK_RELATION:copiedto=
+
+TASK_REMIND=
+TASK_REMIND:due_date=
+TASK_REMIND:start_date=
+TASK_REMIND:end_date=

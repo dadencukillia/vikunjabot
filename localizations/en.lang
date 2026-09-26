@@ -2,9 +2,11 @@ EMOJI:project=📽️
 EMOJI:task=📋
 EMOJI:file=📁
 EMOJI:comment=💬
-EMOJI:created=✨
+EMOJI:assignment=📌
+EMOJI:remind=🔔
+EMOJI:created=+
 EMOJI:updated=⟳
-EMOJI:deleted=✖
+EMOJI:deleted=✗
 
 TITLE=<b>🦙 Vikunja</b>
 TITLE:project=<b>🦙 Vikunja:</b> project updates
@@ -43,3 +45,8 @@ TASK_RELATION:preceeds=precedes
 TASK_RELATION:follows=follows
 TASK_RELATION:copiedfrom=copied from
 TASK_RELATION:copiedto=copied to
+
+TASK_REMIND=Remind
+TASK_REMIND:due_date=Due soon
+TASK_REMIND:start_date=Starts soon
+TASK_REMIND:end_date=Ends soon

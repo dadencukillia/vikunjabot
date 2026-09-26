@@ -2,7 +2,6 @@ package webhook
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"log"
 	"net"
@@ -40,8 +39,6 @@ func (a *WebhookServer) Run(
 			w.Write([]byte("no body"))
 			return
 		}
-
-		fmt.Println(string(body))
 
 		if err := a.verifyHeader(r, body); err != nil {
 			log.Printf("signature validation error: %v\n", err)

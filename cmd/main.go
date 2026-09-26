@@ -2,13 +2,9 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"vikunjabot/internal"
 	"vikunjabot/internal/bot"
-	"vikunjabot/internal/diffslog"
-	"vikunjabot/internal/diffstree"
-	"vikunjabot/internal/diffsummary"
 	"vikunjabot/internal/texts"
 	"vikunjabot/internal/webhook"
 
@@ -26,26 +22,22 @@ func main() {
 		log.Panic(err)
 	}
 
-	sumGenerator := diffsummary.NewSummariesGenerator(localePack, config.VikunjaHost)
 	tgbot := bot.NewBot(config.TelegramBotToken, config.TelegramChatId)
+	getMeResp, err := tgbot.GetMe()
+	if err != nil {
+		log.Panic(err)
+	}
 
-	evLogSq := diffslog.NewDiffsLog()
+	if !getMeResp.Ok {
+		log.Panicf("please check your telegram token: %s", getMeResp.ErrorDescription)
+	}
+	log.Printf("Telegram bot logged in as @%s\n", getMeResp.Result.Username)
+
+	pipe := internal.NewPipe(config, localePack, tgbot)
 
 	server := webhook.NewWebhookServer(config.ServerHost, config.VikunjaWebhookSecret)
 	server.Run(context.Background(), func(message webhook.WebhookMessage) error {
-		evLogSq.AddEvent(&message)
-		evLogSq.Squash()
-		flow := evLogSq.GenerateLogFlow()
-		tree := diffstree.LogFlowToDiffsTree(flow)
-
-		for _, text := range sumGenerator.GenerateHTMLSummaries(&tree) {
-			resp, err := tgbot.SendTextMessage(text, bot.HTMLParseMode, false, false)
-			if err != nil {
-				log.Panic(err)
-			}
-
-			fmt.Println(resp)
-		}
+		pipe.PushEvent(message)
 
 		return nil
 	})

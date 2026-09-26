@@ -90,6 +90,17 @@ func (a TextTools) Lang(key string, variant string) string {
 	return a.localePack.GetOrDefault(key, variant, LANG_KEY_NOT_SET)
 }
 
+func (a TextTools) LangMap(key string, variant string, dict map[string]string) string {
+	return a.localePack.GetWithDictOrDefault(key, variant, func(key string) (string, bool) {
+		v, ok := dict[key]
+		return v, ok
+	}, LANG_KEY_NOT_SET)
+}
+
+func (a TextTools) ExtLang() *LocalePack {
+	return a.localePack
+}
+
 func (a TextTools) EscHTML(text string) string {
 	return html.EscapeString(text)
 }
@@ -134,6 +145,11 @@ func (a TextTools) Quote(text string) string {
 	return "<blockquote>" + text + "</blockquote>"
 }
 
-func (a TextTools) QuoteLine(text string) string {
+func (a TextTools) QuotePage(text string) string {
 	return "<blockquote expandable>" + text + "</blockquote>"
 }
+
+func (a TextTools) Anchor(text string, url string) string {
+	return "<a href=" + strconv.Quote(url) + ">" + text + "</a>"
+}
+

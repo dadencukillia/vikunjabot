@@ -1,13 +1,45 @@
 EMOJI:project=📽️
 EMOJI:task=📋
+EMOJI:file=📁
+EMOJI:comment=💬
+EMOJI:created=✨
+EMOJI:updated=⟳
+EMOJI:deleted=✖
 
 TITLE=<b>🦙 Vikunja</b>
 TITLE:project=<b>🦙 Vikunja:</b> project updates
 TITLE:task=<b>🦙 Vikunja:</b> tasks announces
 TITLE:reminders=<b>🦙 Vikunja</b> reminds you!
 
-NAME=<b>Name:</b>
-NAME:project=<b>Project name:</b>
-NAME:task=<b>Task name:</b>
+SINGULAR:project=Project
+SINGULAR:task=Task
+
+PLURAL:task=Tasks
+
+STATUS_PROJECT:updated=Project updated
+STATUS_PROJECT:deleted=Project deleted
+
+PROJECT_SHARED_TEAM=👥 Shared with a <b>^{NAME}</b> team
+PROJECT_SHARED_TEAMS=👥 Shared with ^{COUNT} teams
+PROJECT_SHARED_USER=🔗 Shared with <b>@^{NAME}</b>
+PROJECT_SHARED_USERS=🔗 Shared with ^{COUNT} users
 
 TASKS_OVERDUE_COUNT=🚩 ^{COUNT} tasks missed their deadline
+TASK_OVERDUE=🚩 missed his deadline
+
+ANCHOR:website=Website
+ANCHOR:project=Project
+ANCHOR:task=Task
+
+TASK_RELATIONS=Relations
+TASK_RELATION:subtask=is subtask
+TASK_RELATION:parenttask=parent
+TASK_RELATION:related=related
+TASK_RELATION:duplicateof=duplicate of
+TASK_RELATION:duplicates=duplicates
+TASK_RELATION:blocking=blocking
+TASK_RELATION:blocked=blocked
+TASK_RELATION:preceeds=precedes
+TASK_RELATION:follows=follows
+TASK_RELATION:copiedfrom=copied from
+TASK_RELATION:copiedto=copied to

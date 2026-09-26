@@ -1,7 +1,6 @@
 package main
 
 import (
-	_ "github.com/joho/godotenv/autoload"
 	"context"
 	"fmt"
 	"log"
@@ -12,6 +11,8 @@ import (
 	"vikunjabot/internal/diffsummary"
 	"vikunjabot/internal/texts"
 	"vikunjabot/internal/webhook"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
@@ -25,7 +26,7 @@ func main() {
 		log.Panic(err)
 	}
 
-	sumGenerator := diffsummary.NewSummariesGenerator(localePack)
+	sumGenerator := diffsummary.NewSummariesGenerator(localePack, config.VikunjaHost)
 	tgbot := bot.NewBot(config.TelegramBotToken, config.TelegramChatId)
 
 	evLogSq := diffslog.NewDiffsLog()
@@ -34,7 +35,8 @@ func main() {
 	server.Run(context.Background(), func(message webhook.WebhookMessage) error {
 		evLogSq.AddEvent(&message)
 		evLogSq.Squash()
-		tree := diffstree.LogFlowToDiffsTree(evLogSq.GenerateLogFlow())
+		flow := evLogSq.GenerateLogFlow()
+		tree := diffstree.LogFlowToDiffsTree(flow)
 
 		for _, text := range sumGenerator.GenerateHTMLSummaries(&tree) {
 			resp, err := tgbot.SendTextMessage(text, bot.HTMLParseMode, false, false)

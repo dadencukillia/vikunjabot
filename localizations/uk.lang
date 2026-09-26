@@ -1,13 +1,45 @@
 EMOJI:project=📽️
 EMOJI:task=📋
+EMOJI:file=📁
+EMOJI:comment=💬
+EMOJI:created=✨
+EMOJI:updated=⟳
+EMOJI:deleted=✖
 
 TITLE=<b>🦙 Vikunja</b>
 TITLE:project=<b>🦙 Vikunja:</b> оновлення проєкту
 TITLE:task=<b>🦙 Vikunja:</b> анонси завдань
 TITLE:reminders=<b>🦙 Vikunja</b> нагадування
 
-NAME=<b>Назва:</b>
-NAME:project=<b>Назва проєкту:</b>
-NAME:task=<b>Назва завдання:</b>
+SINGULAR:project=Проєкт
+SINGULAR:task=Завдання
 
-TASKS_OVERDUE_COUNT=🚩 ^{COUNT} задач просрочилося
+PLURAL:task=Завдання
+
+STATUS_PROJECT:updated=Оновлено проєкт
+STATUS_PROJECT:deleted=Видалено проєкт
+
+PROJECT_SHARED_TEAM=👥 Поширено команді <b>^{NAME}</b>
+PROJECT_SHARED_TEAMS=👥 Поширено ^{COUNT} командам
+PROJECT_SHARED_USER=🔗 Поширено <b>@^{NAME}</b>
+PROJECT_SHARED_USERS=🔗 Поширено ^{COUNT} користувачам
+
+TASKS_OVERDUE_COUNT=🚩 ^{COUNT} задач прострочилося
+TASK_OVERDUE=🚩 пройшов строк
+
+ANCHOR:website=Вебсайт
+ANCHOR:project=Проєкт
+ANCHOR:task=Завдання
+
+TASK_RELATIONS=Зв'язки
+TASK_RELATION:subtask=є підзавданням
+TASK_RELATION:parenttask=батьківське завдання
+TASK_RELATION:related=пов'язаний
+TASK_RELATION:duplicateof=дуплікат
+TASK_RELATION:duplicates=дуплікує
+TASK_RELATION:blocking=блокує
+TASK_RELATION:blocked=заблокований
+TASK_RELATION:preceeds=передує чомусь
+TASK_RELATION:follows=слідує чомусь
+TASK_RELATION:copiedfrom=скопійований
+TASK_RELATION:copiedto=скопіювався

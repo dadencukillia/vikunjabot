@@ -1,6 +1,8 @@
 package diffstree
 
-import "vikunjabot/internal/diffslog"
+import (
+	"vikunjabot/internal/diffslog"
+)
 
 func LogFlowToDiffsTree(flow diffslog.LogFlow) RootNode {
 	rootNode := RootNode{
@@ -9,6 +11,24 @@ func LogFlowToDiffsTree(flow diffslog.LogFlow) RootNode {
 
 	// Projects registration
 	for _, ev := range flow.Instances {
+		for _, project := range ev.MessageData.GetProjects() {
+			if p, ok := rootNode.Projects[project.ID]; !ok || (p.Instance == nil && project != nil) {
+				rootNode.Projects[project.ID] = &ProjectNode{
+					ID: project.ID,
+					Instance: project,
+					Status: Unchanged,
+					Tasks: map[int64]*TaskNode{},
+					ImUsersShared: []ImUserSharedNode{},
+					ImTeamsShared: []ImTeamSharedNode{},
+					ImTasksOverdue: map[int64]struct{}{},
+					DiffDoer: nil,
+					Topology: map[ChangingTopology]struct{}{},
+				}
+			}
+		}
+	}
+
+	for _, ev := range flow.Events {
 		for _, project := range ev.MessageData.GetProjects() {
 			if p, ok := rootNode.Projects[project.ID]; !ok || (p.Instance == nil && project != nil) {
 				rootNode.Projects[project.ID] = &ProjectNode{

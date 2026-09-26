@@ -22,7 +22,10 @@ func (a *WebhookServer) verifyHeader(r *http.Request, body []byte) error {
 	mac := hmac.New(sha256.New, []byte(a.webhookSecret))
 	mac.Write(body)
 	expectedMAC := mac.Sum(nil)
-	hmac.Equal(hexSign, expectedMAC)
+
+	if !hmac.Equal(hexSign, expectedMAC) {
+		return ErrWebWrongHash
+	}
 
 	return nil
 }

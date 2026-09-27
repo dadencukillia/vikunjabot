@@ -27,7 +27,7 @@ PROJECT_SHARED_USER=🔗 Shared with <b>@^{NAME}</b>
 PROJECT_SHARED_USERS=🔗 Shared with ^{COUNT} users
 
 TASKS_OVERDUE_COUNT=🚩 ^{COUNT} tasks missed their deadline
-TASK_OVERDUE=🚩 missed his deadline
+TASK_OVERDUE=🚩 missed deadline
 
 ANCHOR:website=Website
 ANCHOR:project=Project
@@ -41,7 +41,7 @@ TASK_RELATION:duplicateof=duplicate of
 TASK_RELATION:duplicates=duplicates
 TASK_RELATION:blocking=blocking
 TASK_RELATION:blocked=blocked
-TASK_RELATION:preceeds=precedes
+TASK_RELATION:preceds=precedes
 TASK_RELATION:follows=follows
 TASK_RELATION:copiedfrom=copied from
 TASK_RELATION:copiedto=copied to

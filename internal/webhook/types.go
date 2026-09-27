@@ -14,7 +14,7 @@ const (
 	RelationKindDuplicates VikunjaRelationKind = `duplicates`
 	RelationKindBlocking VikunjaRelationKind = `blocking`
 	RelationKindBlocked VikunjaRelationKind = `blocked`
-	RelationKindPreceeds VikunjaRelationKind = `precedes`
+	RelationKindPreceds VikunjaRelationKind = `precedes`
 	RelationKindFollows VikunjaRelationKind = `follows`
 	RelationKindCopiedFrom VikunjaRelationKind = `copiedfrom`
 	RelationKindCopiedTo VikunjaRelationKind = `copiedto`

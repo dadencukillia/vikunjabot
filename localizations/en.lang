@@ -4,6 +4,7 @@ EMOJI:file=📁
 EMOJI:comment=💬
 EMOJI:assignment=📌
 EMOJI:remind=🔔
+EMOJI:done=✔
 EMOJI:created=+
 EMOJI:updated=⟳
 EMOJI:deleted=✗
@@ -50,3 +51,5 @@ TASK_REMIND=Remind
 TASK_REMIND:due_date=Due soon
 TASK_REMIND:start_date=Starts soon
 TASK_REMIND:end_date=Ends soon
+
+TASK_STATUS:done=Done

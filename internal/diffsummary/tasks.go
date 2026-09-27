@@ -51,6 +51,7 @@ func (a TaskFormatter) BuildText(b texts.TextBuilder, t *texts.TextTools) string
 
 func (a TaskFormatter) BuildStatusBody(b texts.TextBuilder, t *texts.TextTools) string {
 	b.Line(a.taskNode.ImOverdue, t.Bold(t.Lang("TASK_OVERDUE", "")))
+	b.Line(a.taskNode.Status != diffstree.Unchanged && a.taskNode.Instance.Done, t.Bold(t.Concat(t.Lang("EMOJI", "done"), t, t.Lang("TASK_STATUS", "done"))))
 
 	for _, reminder := range a.taskNode.ImReminders {
 		timeZone := time.FixedZone(a.timeZone, 0)

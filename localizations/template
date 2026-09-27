@@ -4,6 +4,7 @@ EMOJI:file=📁
 EMOJI:comment=💬
 EMOJI:assignment=📌
 EMOJI:remind=🔔
+EMOJI:done=✔
 EMOJI:created=+
 EMOJI:updated=⟳
 EMOJI:deleted=✗
@@ -11,7 +12,7 @@ EMOJI:deleted=✗
 TITLE=<b>🦙 Vikunja</b>
 TITLE:project=<b>🦙 Vikunja:</b>
 TITLE:task=<b>🦙 Vikunja:</b>
-TITLE:reminders=<b>🦙 Vikunja</b>
+TITLE:reminders=<b>🦙 Vikunja:</b>
 
 SINGULAR:project=
 SINGULAR:task=
@@ -50,3 +51,5 @@ TASK_REMIND=
 TASK_REMIND:due_date=
 TASK_REMIND:start_date=
 TASK_REMIND:end_date=
+
+TASK_STATUS:done=

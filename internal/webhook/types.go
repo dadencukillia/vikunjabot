@@ -52,13 +52,32 @@ type VikunjaProject struct {
 }
 
 type VikunjaTask struct {
-	Title string `json:"title"`
 	ID int64 `json:"id"`
+	Title string `json:"title"`
 	Description string `json:"description"`
-	DueDate string `json:"due_date"`
-	Priority int `json:"priority"`
-	Identifier string `json:"identifier"`
 	ProjectID int64 `json:"project_id"`
+	Done bool `json:"done"`
+	DoneAt time.Time `json:"done_at"`
+	DueDate time.Time `json:"due_date"`
+	Reminders []*VikunjaTaskReminder `json:"reminders"`
+	Priority int64 `json:"priority"`
+	StartDate time.Time `json:"start_date"`
+	EndDate time.Time `json:"end_date"`
+	Assignees []*VikunjaUser `json:"assignees"`
+	HexColor string `json:"hex_color"`
+	PercentDone float64 `json:"percent_done"`
+	Identifier string `json:"identifier"`
+	Index int64 `json:"index"`
+	Attachments []*VikunjaTaskAttachment `json:"attachments"`
+	CoverImageAttachmentID int64 `json:"cover_image_attachment_id"`
+	Created time.Time `json:"created"`
+	Updated time.Time `json:"updated"`
+	DeletedAt time.Time `json:"deleted_at,omitzero"`
+	Comments []*VikunjaTaskComment `json:"comments,omitempty"`
+	CommentCount *int64 `json:"comment_count,omitempty"`
+	TimeEntriesCount *int64 `json:"time_entries_count,omitempty"`
+	Position float64 `json:"position"`
+	CreatedBy *VikunjaUser `json:"created_by"`
 }
 
 type VikunjaTaskComment struct {
